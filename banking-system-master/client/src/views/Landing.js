@@ -251,7 +251,7 @@ export default function Landing() {
               <GithubButton
                 variant="contained"
                 color="primary"
-                href="https://github.com/parthxrawat/banking-system"
+                href="https://github.com/parthxrawat/SimpleBankingSystem"
               >
                 View on GitHub
               </GithubButton>
