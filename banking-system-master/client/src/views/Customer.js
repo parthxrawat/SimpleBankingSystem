@@ -22,16 +22,17 @@ export default function Customer() {
   const [data, setData] = useState({});
   const [user, setUser] = useState([]);
   const navigate = useNavigate();
-  const { transferData, setTransferData, sendMoney } = useContext(multiStepContext);
+  const { sendMoney } = useContext(multiStepContext);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const customerResponse = await axios.get(`http://localhost:3000/api/customers/${id}`);
+        const customerResponse = await axios.get(`http://localhost:5000/api/customers/${id}`);
         setData(customerResponse.data);
 
-        const usersResponse = await axios.get('http://localhost:3000/api/customers');
+        const usersResponse = await axios.get('http://localhost:5000/api/customers');
         setUser(usersResponse.data);
+        console.log('Fetched users:', usersResponse.data); // Debug log
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -47,8 +48,8 @@ export default function Customer() {
       id2,
     };
     try {
-      await axios.put('http://localhost:3000/api/customer/money', transferData);
-      await axios.post('http://localhost:3000/api/transactions', transferData);
+      await axios.put('http://localhost:5000/api/customer/money', transferData);
+      await axios.post('http://localhost:5000/api/transactions', transferData);
       navigate('/customers');
     } catch (error) {
       console.error("Error sending money", error);
@@ -79,19 +80,24 @@ export default function Customer() {
           </div>
           <div className="row">
             <FormControl fullWidth margin="normal">
-              <InputLabel id="countrySelectLabel">Transfer to</InputLabel>
+              <InputLabel id="transferToLabel">Transfer to</InputLabel>
               <Select
-                labelId="countrySelectLabel"
-                id="countrySelect"
+                labelId="transferToLabel"
+                id="transferTo"
                 onChange={(e) => setId2(e.target.value)}
                 value={id2}
               >
-                {user.map((code) =>
-                  data.name !== code.name ? (
-                    <MenuItem key={code._id} value={code._id}>
-                      {code.name}
-                    </MenuItem>
-                  ) : null
+                <MenuItem value="" disabled>Select a customer</MenuItem>
+                {user.length === 0 ? (
+                  <MenuItem disabled>No customers available</MenuItem>
+                ) : (
+                  user.map((code) =>
+                    data.name !== code.name ? (
+                      <MenuItem key={code._id} value={code._id}>
+                        {code.name}
+                      </MenuItem>
+                    ) : null
+                  )
                 )}
               </Select>
             </FormControl>

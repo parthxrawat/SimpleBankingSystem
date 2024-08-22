@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
 import {
   Table,
   TableBody,
@@ -14,32 +13,16 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  backgroundColor: theme.palette.common.black,
-  color: theme.palette.common.white,
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
+// Styled components
+const StyledContainer = styled(Container)(({ theme }) => ({
+  marginTop: '40px',
+  marginBottom: '40px',
+  maxWidth: '1200px',
 }));
 
-const useStyles = styled({
-  tableContainer: {
-    margin: '40px auto',
-    width: '90%',
-    maxWidth: '1200px',
-    borderRadius: '8px',
-    overflow: 'hidden',
-  },
-  table: {
-    minWidth: 700,
-  },
-  button: {
-    textTransform: 'capitalize',
-  },
-});
-
-const Header = styled(Typography)(({ theme }) => ({
+const StyledHeader = styled(Typography)(({ theme }) => ({
   marginBottom: '20px',
   textAlign: 'center',
   fontSize: '2rem',
@@ -47,8 +30,31 @@ const Header = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
 }));
 
+const StyledTable = styled(Table)(({ theme }) => ({
+  minWidth: 700,
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[200],
+  color: theme.palette.text.primary,
+  '&:nth-of-type(even)': {
+    backgroundColor: theme.palette.grey[100],
+  },
+}));
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  borderRadius: '8px',
+  overflow: 'hidden',
+  boxShadow: theme.shadows[5],
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  textTransform: 'capitalize',
+  borderRadius: '20px',
+  padding: '8px 16px',
+}));
+
 export default function Customers() {
-  const classes = useStyles();
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -65,10 +71,10 @@ export default function Customers() {
   }, []);
 
   return (
-    <Container>
-      <Header>Customer List</Header>
-      <TableContainer component={Paper} className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="customized table">
+    <StyledContainer>
+      <StyledHeader>Customer List</StyledHeader>
+      <StyledTableContainer component={Paper}>
+        <StyledTable aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell>S No.</StyledTableCell>
@@ -83,20 +89,22 @@ export default function Customers() {
                 <StyledTableCell component="th" scope="row">
                   {index + 1}
                 </StyledTableCell>
-                <StyledTableCell align="left">{item.name}</StyledTableCell>
-                <StyledTableCell align="right">{item.amount.toLocaleString()}</StyledTableCell>
+                <StyledTableCell>{item.name}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {item.amount.toLocaleString()}
+                </StyledTableCell>
                 <StyledTableCell align="right">
                   <Link to={`/customers/${item._id}`} style={{ textDecoration: 'none' }}>
-                    <Button variant="contained" color="primary" className={classes.button}>
+                    <StyledButton variant="contained" color="primary">
                       Transfer
-                    </Button>
+                    </StyledButton>
                   </Link>
                 </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+        </StyledTable>
+      </StyledTableContainer>
+    </StyledContainer>
   );
 }

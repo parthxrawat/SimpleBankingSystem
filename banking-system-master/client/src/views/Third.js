@@ -103,6 +103,7 @@ export default function Third() {
             className={classes.button}
             onClick={submitData}
           >
+            {console.log(submitData)}
             Submit
           </Button>
         </div>

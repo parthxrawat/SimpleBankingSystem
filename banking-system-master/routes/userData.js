@@ -1,7 +1,7 @@
 const express = require("express");
 const transactions = require("../models/transactionSchema");
 const router = express.Router();
-const User = require("../models/userSchema");
+const user = require("../models/userSchema");
 
 // Add a new user
 router.post("/add", async (req, res) => {
@@ -37,7 +37,7 @@ router.post("/add", async (req, res) => {
   }
 
   try {
-    const newUser = new User({
+    const newUser = new user({
       firstName,
       lastName,
       Phone,
@@ -62,7 +62,7 @@ router.post("/add", async (req, res) => {
 // Get all customers
 router.get("/customers", async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await user.find();
     return res.status(200).json(users);
   } catch (error) {
     console.error(error);
@@ -73,11 +73,11 @@ router.get("/customers", async (req, res) => {
 // Get a customer by ID
 router.get("/customers/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
+    const userData = await user.findById(req.params.id);
+    if (!userData) {
       return res.status(404).json({ msg: "User not found" });
     }
-    return res.status(200).json(user);
+    return res.status(200).json(userData);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: "Server error", error });
@@ -89,8 +89,8 @@ router.put("/customer/money", async (req, res) => {
   try {
     const { id, count, id2 } = req.body;
 
-    const user1 = await User.findById(id);
-    const user2 = await User.findById(id2);
+    const user1 = await user.findById(id);
+    const user2 = await user.findById(id2);
 
     if (!user1 || !user2) {
       return res.status(404).json({ msg: "One or both users not found" });
@@ -114,8 +114,8 @@ router.post("/transactions", async (req, res) => {
   try {
     const { id, count, id2 } = req.body;
 
-    const user1 = await User.findById(id);
-    const user2 = await User.findById(id2);
+    const user1 = await user.findById(id);
+    const user2 = await user.findById(id2);
 
     if (!user1 || !user2) {
       return res.status(404).json({ msg: "One or both users not found" });
